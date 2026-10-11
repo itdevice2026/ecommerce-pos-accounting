@@ -35,7 +35,7 @@ These were verified on 2026-10-11 with a test run that rolled itself back: boots
 
 ## One-time steps
 
-1. **Enable the access-token hook.** Dashboard → Authentication → Hooks → *Customize Access Token (JWT) Claims* → Postgres function `public.custom_access_token_hook`. Until it is on, RLS still works by looking up `user_roles`, just with one extra query per check.
+1. **Enable the access-token hook.** (Done 2026-10-11.) Dashboard → Authentication → Hooks → *Customize Access Token (JWT) Claims* → Postgres function `public.custom_access_token_hook`. Until it is on, RLS still works by looking up `user_roles`, just with one extra query per check.
 2. **Create the first user and the company.** Sign up the owner account (Authentication → Users → Add user), sign in from the app, then call once:
 
    ```sql

@@ -23,6 +23,7 @@ Phase 0 (foundation) in progress:
 
 - [x] Supabase project `ecommerce-pos-accounting` (Singapore)
 - [x] Database foundation: companies, branches, roles, RLS, chart of accounts, tax codes, fiscal periods, journals with balance and period-lock rules, audit log
-- [ ] Enable the access-token hook and bootstrap the company (see Supabase setup)
+- [x] Access-token hook enabled (role, company and branches in the JWT)
+- [ ] Create the owner login and bootstrap the company (see Supabase setup)
 - [ ] Next.js app skeleton with Supabase Auth
 - [ ] GitHub Actions CI/CD
