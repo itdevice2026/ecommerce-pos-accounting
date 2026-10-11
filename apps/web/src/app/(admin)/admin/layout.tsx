@@ -1,11 +1,12 @@
+"use client";
+
 import Link from "next/link";
-import { Suspense } from "react";
-import { signOut } from "@/app/login/actions";
-import { Button, Skeleton } from "@/components/ui";
-import { ROLE_LABELS, getCurrentUser } from "@/lib/auth";
+import { SignOutButton } from "@/components/sign-out-button";
+import { Skeleton } from "@/components/ui";
+import { BACK_OFFICE_ROLES, ROLE_LABELS, RequireRole, useAuth } from "@/lib/auth";
 
 const nav = [
-  { href: "/admin", label: "Dashboard", ready: true },
+  { href: "/admin/", label: "Dashboard", ready: true },
   { href: "#", label: "Products", ready: false, phase: "Phase 1" },
   { href: "#", label: "Inventory", ready: false, phase: "Phase 1" },
   { href: "#", label: "Purchasing", ready: false, phase: "Phase 1" },
@@ -50,28 +51,29 @@ export default function AdminLayout({ children }: LayoutProps<"/admin">) {
 
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="flex items-center justify-end gap-3 border-b border-line bg-surface px-4 py-3 sm:px-6">
-          <Suspense fallback={<Skeleton className="h-5 w-40" />}>
-            <UserBadge />
-          </Suspense>
-          <form action={signOut}>
-            <Button variant="ghost" className="h-8 px-3">
-              Sign out
-            </Button>
-          </form>
+          <UserBadge />
+          <SignOutButton className="h-8 px-3" />
         </header>
-        <main className="flex-1 px-4 py-6 sm:px-6">{children}</main>
+        <main className="flex-1 px-4 py-6 sm:px-6">
+          <RequireRole roles={BACK_OFFICE_ROLES} fallback={<Skeleton className="mx-auto h-64 max-w-5xl" />}>
+            {children}
+          </RequireRole>
+        </main>
       </div>
     </div>
   );
 }
 
-async function UserBadge() {
-  const user = await getCurrentUser();
+function UserBadge() {
+  const { loading, user } = useAuth();
+  if (loading) return <Skeleton className="h-5 w-40" />;
   if (!user) return null;
   return (
     <span className="truncate text-sm text-muted">
       {user.email}
-      {user.role ? <span className="ml-2 rounded-md bg-surface-2 px-2 py-0.5 text-xs font-medium text-ink">{ROLE_LABELS[user.role]}</span> : null}
+      {user.role ? (
+        <span className="ml-2 rounded-md bg-surface-2 px-2 py-0.5 text-xs font-medium text-ink">{ROLE_LABELS[user.role]}</span>
+      ) : null}
     </span>
   );
 }

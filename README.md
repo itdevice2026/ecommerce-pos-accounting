@@ -2,7 +2,9 @@
 
 One web app that sells online and in-store from a single stock pool, with every sale, purchase and stock movement posting its own double-entry journal.
 
-**Stack:** Next.js + TypeScript · Supabase (Postgres, Auth, RLS, Edge Functions, Storage, Realtime) · GitHub Actions CI/CD
+**Live:** https://itdevice2026.github.io/ecommerce-pos-accounting/
+
+**Stack:** Next.js static site on GitHub Pages · Supabase (Postgres, Auth, RLS) in the shared bom-system project · GitHub Actions
 
 ## Modules (v1)
 
@@ -36,6 +38,6 @@ Phase 0 (foundation):
 - [x] Companies, branches, roles, RLS, chart of accounts, tax codes, fiscal periods, journals with balance and period-lock rules, audit log
 - [x] Next.js app: staff sign-in, role-based access, first-run Company Setup screen (allow-listed), back-office dashboard, POS placeholder
 - [x] GitHub Actions CI: lint, types, build, and migrations apply cleanly on a fresh database
+- [x] Hosted on GitHub Pages, deployed on every push to `main`
 - [ ] Run Company Setup (`/setup`) with an allow-listed account
 - [ ] Users & roles screen
-- [ ] App hosting (Vercel or own server)

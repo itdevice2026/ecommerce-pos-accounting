@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { signOut } from "@/app/login/actions";
-import { Button } from "@/components/ui";
+import { SignOutButton } from "@/components/sign-out-button";
 
 export const metadata: Metadata = { title: "No access" };
 
@@ -20,9 +19,7 @@ export default function NoAccessPage() {
           >
             Home
           </Link>
-          <form action={signOut}>
-            <Button variant="ghost">Sign out</Button>
-          </form>
+          <SignOutButton />
         </div>
       </div>
     </main>

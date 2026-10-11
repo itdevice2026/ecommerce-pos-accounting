@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
-import { Suspense } from "react";
-import { Card, Skeleton } from "@/components/ui";
-import { getCurrentUser } from "@/lib/auth";
-import { SetupForm } from "./setup-form";
+import { Card } from "@/components/ui";
+import { SetupGate } from "./setup-form";
 
 export const metadata: Metadata = { title: "Company setup" };
 
@@ -17,18 +14,9 @@ export default function SetupPage() {
           You&apos;re signed in but not linked to a company yet. Create it here to start using the system.
         </p>
         <Card className="mt-6">
-          <Suspense fallback={<Skeleton className="h-96" />}>
-            <SetupGate />
-          </Suspense>
+          <SetupGate />
         </Card>
       </div>
     </main>
   );
-}
-
-async function SetupGate() {
-  const user = await getCurrentUser();
-  if (!user) redirect("/login?next=/setup");
-  if (user.role) redirect("/admin");
-  return <SetupForm />;
 }
