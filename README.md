@@ -39,5 +39,14 @@ Phase 0 (foundation):
 - [x] Next.js app: staff sign-in, role-based access, first-run Company Setup screen (allow-listed), back-office dashboard, POS placeholder
 - [x] GitHub Actions CI: lint, types, build, and migrations apply cleanly on a fresh database
 - [x] Hosted on GitHub Pages, deployed on every push to `main`
-- [ ] Run Company Setup (`/setup`) with an allow-listed account
+- [x] Company set up: BERNA'S FOOD HUB AND MINI GROCERY
+
+Phase 1 (catalog and inventory):
+
+- [x] Products: categories, products, variants (barcode / scale PLU), POS and online prices
+- [ ] Inventory: locations, receiving, transfers, adjustments, stock ledger
+- [ ] Purchasing: suppliers, purchase orders
+
+Next up:
+
 - [ ] Users & roles screen

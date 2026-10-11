@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { SignOutButton } from "@/components/sign-out-button";
 import { Skeleton } from "@/components/ui";
 import { BACK_OFFICE_ROLES, ROLE_LABELS, RequireRole, useAuth } from "@/lib/auth";
 
 const nav = [
   { href: "/admin/", label: "Dashboard", ready: true },
-  { href: "#", label: "Products", ready: false, phase: "Phase 1" },
+  { href: "/admin/products/", label: "Products", ready: true },
   { href: "#", label: "Inventory", ready: false, phase: "Phase 1" },
   { href: "#", label: "Purchasing", ready: false, phase: "Phase 1" },
   { href: "#", label: "Accounting", ready: false, phase: "Phase 2" },
@@ -16,6 +17,9 @@ const nav = [
 ];
 
 export default function AdminLayout({ children }: LayoutProps<"/admin">) {
+  const pathname = usePathname();
+  const isCurrent = (href: string) =>
+    href === "/admin/" ? pathname === "/admin" || pathname === "/admin/" : pathname.startsWith(href.replace(/\/$/, ""));
   return (
     <div className="flex min-h-full flex-1 flex-col md:flex-row">
       <aside className="border-b border-line bg-surface md:w-60 md:shrink-0 md:border-r md:border-b-0">
@@ -31,7 +35,8 @@ export default function AdminLayout({ children }: LayoutProps<"/admin">) {
               <Link
                 key={item.label}
                 href={item.href}
-                className="rounded-lg px-3 py-2 text-sm font-medium whitespace-nowrap text-ink hover:bg-surface-2"
+                aria-current={isCurrent(item.href) ? "page" : undefined}
+                className={`rounded-lg px-3 py-2 text-sm font-medium whitespace-nowrap hover:bg-surface-2 ${isCurrent(item.href) ? "bg-surface-2 text-brand" : "text-ink"}`}
               >
                 {item.label}
               </Link>

@@ -44,6 +44,34 @@ export function Input({ className, ...props }: ComponentProps<"input">) {
   );
 }
 
+export function Select({ className, ...props }: ComponentProps<"select">) {
+  return (
+    <select
+      className={cx(
+        "h-10 rounded-lg border border-line bg-surface px-3 text-sm text-ink",
+        "focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20 disabled:opacity-70",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+export function Badge({ tone = "neutral", children }: { tone?: "neutral" | "ok" | "muted"; children: ReactNode }) {
+  return (
+    <span
+      className={cx(
+        "inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium",
+        tone === "neutral" && "bg-surface-2 text-ink",
+        tone === "ok" && "bg-ok/15 text-ok",
+        tone === "muted" && "bg-surface-2 text-muted",
+      )}
+    >
+      {children}
+    </span>
+  );
+}
+
 export function Card({ className, children }: { className?: string; children: ReactNode }) {
   return <div className={cx("rounded-xl border border-line bg-surface p-5", className)}>{children}</div>;
 }

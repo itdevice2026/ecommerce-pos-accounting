@@ -23,9 +23,9 @@ The publishable key goes in `apps/web/.env.local`. The secret (service-role) key
   insert into pos_private.setup_allowlist (email) values ('name@meatplus.ph');
   ```
 
-## What Phase 0 created
+## What's in the database
 
-Applied to bom-system on 2026-10-11:
+Applied to bom-system:
 
 | Migration | Contents |
 | --- | --- |
@@ -34,6 +34,7 @@ Applied to bom-system on 2026-10-11:
 | `20261011161122_pos_audit_log` | `pos_audit_log` plus triggers on every POS master and accounting table |
 | `20261011161149_pos_rls_policies` | RLS policies per role; anon has no access to POS tables |
 | `20261011161250_pos_bootstrap_and_defaults` | Setup allow-list; `pos_bootstrap_company()`; default tax codes, chart of accounts, fiscal periods |
+| `20261011164158_pos_catalog` | `pos_categories`, `pos_products`, `pos_product_variants` (barcode / scale PLU), `pos_prices` (POS and online, dated); `pos_save_product()`; `pos_current_prices` view |
 
 ### Rules enforced by the database
 
@@ -46,7 +47,11 @@ Applied to bom-system on 2026-10-11:
 
 Verified on 2026-10-11 in bom-system with a test run that rolled itself back (no data left behind): a non-allow-listed account cannot run setup; setup seeds 23 accounts and 12 periods; a second setup is refused; balanced entries post as no. 1; unbalanced entries are rejected; posted entries are read-only; closed periods block posting; a user with no POS role sees no POS data; the allow-list is not readable by users.
 
-## Company setup (when you're ready)
+## Company setup
+
+Done on 2026-10-11: **BERNA'S FOOD HUB AND MINI GROCERY** (non-VAT), owner `itdevice@meatplus.ph`.
+
+### How it works
 
 Sign in to the app with `itdevice@meatplus.ph` (or another allow-listed email). With no POS role yet, the app sends you to **Company Setup** (`/setup`). Or in SQL as that user:
 
