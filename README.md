@@ -17,13 +17,27 @@ One web app that sells online and in-store from a single stock pool, with every 
 - [System design and spec](docs/system-design.md) — architecture, schema, workflows, accounting rules, reports, CI/CD, roadmap
 - [Supabase setup](docs/supabase-setup.md) — project details, what the migrations create, one-time steps
 
+## Run locally
+
+```bash
+cd apps/web
+cp .env.example .env.local   # add the Supabase publishable key
+npm install
+npm run dev                  # http://localhost:3000
+```
+
+See [apps/web/README.md](apps/web/README.md) for scripts and code layout.
+
 ## Status
 
-Phase 0 (foundation) in progress:
+Phase 0 (foundation):
 
 - [x] Supabase project `ecommerce-pos-accounting` (Singapore)
 - [x] Database foundation: companies, branches, roles, RLS, chart of accounts, tax codes, fiscal periods, journals with balance and period-lock rules, audit log
 - [x] Access-token hook enabled (role, company and branches in the JWT)
-- [ ] Create the owner login and bootstrap the company (see Supabase setup)
-- [ ] Next.js app skeleton with Supabase Auth
-- [ ] GitHub Actions CI/CD
+- [x] Next.js app: staff sign-in, role-based access, first-run Company Setup screen, back-office dashboard, POS placeholder
+- [x] GitHub Actions: CI (lint, types, build, migrations) and database deploy on merge
+- [ ] Add `SUPABASE_ACCESS_TOKEN` and `SUPABASE_DB_PASSWORD` secrets so database deploys run
+- [ ] Create the owner login and run Company Setup (`/setup`)
+- [ ] Users & roles screen
+- [ ] App hosting (Vercel or own server)

@@ -36,7 +36,7 @@ These were verified on 2026-10-11 with a test run that rolled itself back: boots
 ## One-time steps
 
 1. **Enable the access-token hook.** (Done 2026-10-11.) Dashboard → Authentication → Hooks → *Customize Access Token (JWT) Claims* → Postgres function `public.custom_access_token_hook`. Until it is on, RLS still works by looking up `user_roles`, just with one extra query per check.
-2. **Create the first user and the company.** Sign up the owner account (Authentication → Users → Add user), sign in from the app, then call once:
+2. **Create the first user and the company.** Add the owner account (Authentication → Users → Add user), sign in at `/login`, and the app sends you to the **Company Setup** screen (`/setup`). Or call it once in SQL:
 
    ```sql
    select public.bootstrap_company('Company name', 'TIN', true, 'MAIN', 'Main Branch');
@@ -56,3 +56,14 @@ supabase db push                # apply to the linked project
 ```
 
 Never change the schema by hand in the dashboard; add a migration file instead so the repo stays the source of truth.
+
+## GitHub Actions secrets
+
+`.github/workflows/deploy-db.yml` runs `supabase db push` when migrations reach `main`. Add these in GitHub → Settings → Environments → **production** → Secrets:
+
+| Secret | Where to get it |
+| --- | --- |
+| `SUPABASE_ACCESS_TOKEN` | supabase.com → Account → Access Tokens → Generate |
+| `SUPABASE_DB_PASSWORD` | The database password set when the project was created (Project Settings → Database → Reset if unknown) |
+
+Optional repository **variables** for CI builds: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
