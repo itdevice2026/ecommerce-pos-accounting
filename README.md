@@ -15,7 +15,7 @@ One web app that sells online and in-store from a single stock pool, with every 
 ## Docs
 
 - [System design and spec](docs/system-design.md) — architecture, schema, workflows, accounting rules, reports, CI/CD, roadmap
-- [Supabase setup](docs/supabase-setup.md) — project details, what the migrations create, one-time steps
+- [Supabase setup](docs/supabase-setup.md) — how the POS lives in bom-system, what the migrations create, how to change the schema
 
 ## Run locally
 
@@ -32,12 +32,10 @@ See [apps/web/README.md](apps/web/README.md) for scripts and code layout.
 
 Phase 0 (foundation):
 
-- [x] Supabase project `ecommerce-pos-accounting` (Singapore)
-- [x] Database foundation: companies, branches, roles, RLS, chart of accounts, tax codes, fiscal periods, journals with balance and period-lock rules, audit log
-- [x] Access-token hook enabled (role, company and branches in the JWT)
-- [x] Next.js app: staff sign-in, role-based access, first-run Company Setup screen, back-office dashboard, POS placeholder
-- [x] GitHub Actions: CI (lint, types, build, migrations) and database deploy on merge
-- [ ] Add `SUPABASE_ACCESS_TOKEN` and `SUPABASE_DB_PASSWORD` secrets so database deploys run
-- [ ] Create the owner login and run Company Setup (`/setup`)
+- [x] Database in the shared **bom-system** Supabase project, all objects prefixed `pos_`
+- [x] Companies, branches, roles, RLS, chart of accounts, tax codes, fiscal periods, journals with balance and period-lock rules, audit log
+- [x] Next.js app: staff sign-in, role-based access, first-run Company Setup screen (allow-listed), back-office dashboard, POS placeholder
+- [x] GitHub Actions CI: lint, types, build, and migrations apply cleanly on a fresh database
+- [ ] Run Company Setup (`/setup`) with an allow-listed account
 - [ ] Users & roles screen
 - [ ] App hosting (Vercel or own server)

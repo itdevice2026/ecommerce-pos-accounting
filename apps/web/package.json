@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
-    "gen:types": "supabase gen types typescript --project-id zsjtqltvwauzhdyiidfo > src/lib/database.types.ts"
+    "gen:types": "supabase gen types typescript --project-id emkcwukiqxnvcbhkjiqz > /tmp/all-types.ts && echo \"Copy the pos_ entries from /tmp/all-types.ts into src/lib/database.types.ts\""
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

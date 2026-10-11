@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import type { Enums } from "@/lib/database.types";
 import { createClient } from "@/lib/supabase/server";
 
-export type AppRole = Enums<"app_role">;
+export type AppRole = Enums<"pos_app_role">;
 
 export type CurrentUser = {
   id: string;
@@ -40,7 +40,7 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
   if (error || !claims?.sub) return null;
 
   const { data: roleRow } = await supabase
-    .from("user_roles")
+    .from("pos_user_roles")
     .select("role, company_id, branch_ids")
     .eq("user_id", claims.sub)
     .order("created_at")

@@ -33,7 +33,7 @@ export default function PosPage() {
 async function PosHome() {
   const user = await requireRole(POS_ROLES, "/pos");
   const supabase = await createClient();
-  const { data: branches } = await supabase.from("branches").select("id, code, name").in("id", user.branchIds);
+  const { data: branches } = await supabase.from("pos_branches").select("id, code, name").in("id", user.branchIds);
 
   return (
     <Card className="w-full max-w-md text-center">

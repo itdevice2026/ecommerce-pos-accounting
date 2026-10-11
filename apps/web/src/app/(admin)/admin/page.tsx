@@ -24,11 +24,11 @@ async function Dashboard() {
   const supabase = await createClient();
 
   const [company, branches, accounts, taxCodes, periods] = await Promise.all([
-    supabase.from("companies").select("name, tin, vat_registered").eq("id", user.companyId!).maybeSingle(),
-    supabase.from("branches").select("id, code, name, type, is_active").order("code"),
-    supabase.from("accounts").select("id", { count: "exact", head: true }),
-    supabase.from("tax_codes").select("code, name").eq("is_active", true).order("code"),
-    supabase.from("fiscal_periods").select("year, month, status").order("year").order("month"),
+    supabase.from("pos_companies").select("name, tin, vat_registered").eq("id", user.companyId!).maybeSingle(),
+    supabase.from("pos_branches").select("id, code, name, type, is_active").order("code"),
+    supabase.from("pos_accounts").select("id", { count: "exact", head: true }),
+    supabase.from("pos_tax_codes").select("code, name").eq("is_active", true).order("code"),
+    supabase.from("pos_fiscal_periods").select("year, month, status").order("year").order("month"),
   ]);
 
   const openPeriods = (periods.data ?? []).filter((p) => p.status === "open");

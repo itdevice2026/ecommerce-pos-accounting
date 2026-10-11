@@ -1,20 +1,31 @@
 -- Phase 0 · First-run setup: one call creates the company, its first branch,
 -- makes the caller the owner, and seeds tax codes, chart of accounts and
 -- this year's fiscal periods.
+--
+-- bom-system is shared with other apps, so any of their users can sign in here.
+-- Only emails on pos_private.setup_allowlist may run the setup.
 
-create or replace function private.seed_company_defaults(p_company uuid)
+create table pos_private.setup_allowlist (
+  email      text primary key check (email = lower(email)),
+  added_at   timestamptz not null default now()
+);
+alter table pos_private.setup_allowlist enable row level security;
+revoke all on pos_private.setup_allowlist from public, anon, authenticated;
+insert into pos_private.setup_allowlist (email) values ('itdevice@meatplus.ph');
+
+create or replace function pos_private.seed_company_defaults(p_company uuid)
 returns void
 language plpgsql security definer set search_path = ''
 as $$
 declare
   y int := extract(year from (now() at time zone 'Asia/Manila'))::int;
 begin
-  insert into public.tax_codes (company_id, code, name, rate, type) values
+  insert into public.pos_tax_codes (company_id, code, name, rate, type) values
     (p_company, 'VAT12',  'VAT 12%',    0.12, 'vatable'),
     (p_company, 'EXEMPT', 'VAT-exempt', 0,    'exempt'),
     (p_company, 'ZERO',   'Zero-rated', 0,    'zero_rated');
 
-  insert into public.accounts (company_id, code, name, type, normal_balance) values
+  insert into public.pos_accounts (company_id, code, name, type, normal_balance) values
     (p_company, '1010', 'Cash on hand',                          'asset',     'debit'),
     (p_company, '1020', 'Cash in bank',                          'asset',     'debit'),
     (p_company, '1030', 'Payment gateway clearing',              'asset',     'debit'),
@@ -39,15 +50,14 @@ begin
     (p_company, '6010', 'Payment gateway fees',                  'expense',   'debit'),
     (p_company, '6020', 'Cash over/short',                       'expense',   'debit');
 
-  insert into public.fiscal_periods (company_id, year, month)
+  insert into public.pos_fiscal_periods (company_id, year, month)
   select p_company, y, m from generate_series(1, 12) as m;
 end;
 $$;
-revoke execute on function private.seed_company_defaults(uuid) from public, anon, authenticated;
+revoke execute on function pos_private.seed_company_defaults(uuid) from public, anon, authenticated;
 
--- v1 is single-company: bootstrap works only while no company exists yet,
--- so a later sign-up cannot create a second company.
-create or replace function public.bootstrap_company(
+-- v1 is single-company: bootstrap works only while no company exists yet.
+create or replace function public.pos_bootstrap_company(
   p_name            text,
   p_tin             text    default null,
   p_vat_registered  boolean default true,
@@ -64,24 +74,28 @@ begin
   if uid is null then
     raise exception 'Sign in before setting up the company';
   end if;
-  if exists (select 1 from public.companies) then
+  if not exists (select 1 from pos_private.setup_allowlist a
+                  where a.email = lower(coalesce(auth.jwt() ->> 'email', ''))) then
+    raise exception 'This account is not allowed to set up the company';
+  end if;
+  if exists (select 1 from public.pos_companies) then
     raise exception 'The company has already been set up';
   end if;
 
-  insert into public.companies (name, tin, vat_registered, created_by)
+  insert into public.pos_companies (name, tin, vat_registered, created_by)
   values (p_name, p_tin, p_vat_registered, uid)
   returning id into cid;
 
-  insert into public.branches (company_id, code, name, type, created_by)
+  insert into public.pos_branches (company_id, code, name, type, created_by)
   values (cid, p_branch_code, p_branch_name, 'store', uid)
   returning id into bid;
 
-  insert into public.user_roles (user_id, company_id, role, branch_ids, created_by)
+  insert into public.pos_user_roles (user_id, company_id, role, branch_ids, created_by)
   values (uid, cid, 'owner', array[bid], uid);
 
-  perform private.seed_company_defaults(cid);
+  perform pos_private.seed_company_defaults(cid);
   return cid;
 end;
 $$;
-revoke execute on function public.bootstrap_company(text, text, boolean, text, text) from public, anon;
-grant execute on function public.bootstrap_company(text, text, boolean, text, text) to authenticated;
+revoke execute on function public.pos_bootstrap_company(text, text, boolean, text, text) from public, anon;
+grant execute on function public.pos_bootstrap_company(text, text, boolean, text, text) to authenticated;

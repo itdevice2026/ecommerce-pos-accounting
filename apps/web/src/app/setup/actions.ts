@@ -30,7 +30,7 @@ export async function setupCompany(_prev: SetupState, formData: FormData): Promi
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.rpc("bootstrap_company", {
+  const { error } = await supabase.rpc("pos_bootstrap_company", {
     p_name: values.name,
     p_tin: values.tin || undefined,
     p_vat_registered: values.vatRegistered,
@@ -41,11 +41,11 @@ export async function setupCompany(_prev: SetupState, formData: FormData): Promi
   if (error) {
     const message = error.message.includes("already been set up")
       ? "A company is already set up in this system. Ask its owner to add you as a user."
-      : `Setup failed: ${error.message}`;
+      : error.message.includes("not allowed")
+        ? "Your account isn't on the setup allow-list. Ask IT to add your email before running company setup."
+        : `Setup failed: ${error.message}`;
     return { error: message, values };
   }
 
-  // Get a fresh token so the new role and company are in the JWT claims.
-  await supabase.auth.refreshSession();
   redirect("/admin");
 }

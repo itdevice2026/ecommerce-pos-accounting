@@ -1,5 +1,6 @@
-// Generated from Supabase project zsjtqltvwauzhdyiidfo. Regenerate after each migration:
-//   npx supabase gen types typescript --project-id zsjtqltvwauzhdyiidfo > apps/web/src/lib/database.types.ts
+// Types for the POS tables (pos_*) in the shared bom-system Supabase project (emkcwukiqxnvcbhkjiqz).
+// That project also holds other apps' tables, so this file keeps only the pos_ objects.
+// After a POS migration, regenerate with `npm run gen:types` and keep only the pos_ entries.
 
 export type Json =
   | string
@@ -17,7 +18,7 @@ export type Database = {
   }
   public: {
     Tables: {
-      accounts: {
+      pos_accounts: {
         Row: {
           code: string
           company_id: string
@@ -27,9 +28,9 @@ export type Database = {
           is_active: boolean
           is_postable: boolean
           name: string
-          normal_balance: Database["public"]["Enums"]["balance_side"]
+          normal_balance: Database["public"]["Enums"]["pos_balance_side"]
           parent_id: string | null
-          type: Database["public"]["Enums"]["account_type"]
+          type: Database["public"]["Enums"]["pos_account_type"]
         }
         Insert: {
           code: string
@@ -40,9 +41,9 @@ export type Database = {
           is_active?: boolean
           is_postable?: boolean
           name: string
-          normal_balance: Database["public"]["Enums"]["balance_side"]
+          normal_balance: Database["public"]["Enums"]["pos_balance_side"]
           parent_id?: string | null
-          type: Database["public"]["Enums"]["account_type"]
+          type: Database["public"]["Enums"]["pos_account_type"]
         }
         Update: {
           code?: string
@@ -53,28 +54,28 @@ export type Database = {
           is_active?: boolean
           is_postable?: boolean
           name?: string
-          normal_balance?: Database["public"]["Enums"]["balance_side"]
+          normal_balance?: Database["public"]["Enums"]["pos_balance_side"]
           parent_id?: string | null
-          type?: Database["public"]["Enums"]["account_type"]
+          type?: Database["public"]["Enums"]["pos_account_type"]
         }
         Relationships: [
           {
-            foreignKeyName: "accounts_company_id_fkey"
+            foreignKeyName: "pos_accounts_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
-            referencedRelation: "companies"
+            referencedRelation: "pos_companies"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "accounts_parent_id_fkey"
+            foreignKeyName: "pos_accounts_parent_id_fkey"
             columns: ["parent_id"]
             isOneToOne: false
-            referencedRelation: "accounts"
+            referencedRelation: "pos_accounts"
             referencedColumns: ["id"]
           },
         ]
       }
-      audit_log: {
+      pos_audit_log: {
         Row: {
           action: string
           at: string
@@ -110,7 +111,7 @@ export type Database = {
         }
         Relationships: []
       }
-      branches: {
+      pos_branches: {
         Row: {
           address: string | null
           code: string
@@ -120,7 +121,7 @@ export type Database = {
           id: string
           is_active: boolean
           name: string
-          type: Database["public"]["Enums"]["branch_type"]
+          type: Database["public"]["Enums"]["pos_branch_type"]
         }
         Insert: {
           address?: string | null
@@ -131,7 +132,7 @@ export type Database = {
           id?: string
           is_active?: boolean
           name: string
-          type?: Database["public"]["Enums"]["branch_type"]
+          type?: Database["public"]["Enums"]["pos_branch_type"]
         }
         Update: {
           address?: string | null
@@ -142,19 +143,19 @@ export type Database = {
           id?: string
           is_active?: boolean
           name?: string
-          type?: Database["public"]["Enums"]["branch_type"]
+          type?: Database["public"]["Enums"]["pos_branch_type"]
         }
         Relationships: [
           {
-            foreignKeyName: "branches_company_id_fkey"
+            foreignKeyName: "pos_branches_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
-            referencedRelation: "companies"
+            referencedRelation: "pos_companies"
             referencedColumns: ["id"]
           },
         ]
       }
-      companies: {
+      pos_companies: {
         Row: {
           address: string | null
           created_at: string
@@ -184,7 +185,7 @@ export type Database = {
         }
         Relationships: []
       }
-      doc_sequences: {
+      pos_doc_sequences: {
         Row: {
           branch_id: string | null
           company_id: string
@@ -217,22 +218,22 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "doc_sequences_branch_id_fkey"
+            foreignKeyName: "pos_doc_sequences_branch_id_fkey"
             columns: ["branch_id"]
             isOneToOne: false
-            referencedRelation: "branches"
+            referencedRelation: "pos_branches"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "doc_sequences_company_id_fkey"
+            foreignKeyName: "pos_doc_sequences_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
-            referencedRelation: "companies"
+            referencedRelation: "pos_companies"
             referencedColumns: ["id"]
           },
         ]
       }
-      fiscal_periods: {
+      pos_fiscal_periods: {
         Row: {
           closed_at: string | null
           closed_by: string | null
@@ -240,7 +241,7 @@ export type Database = {
           created_at: string
           id: string
           month: number
-          status: Database["public"]["Enums"]["period_status"]
+          status: Database["public"]["Enums"]["pos_period_status"]
           year: number
         }
         Insert: {
@@ -250,7 +251,7 @@ export type Database = {
           created_at?: string
           id?: string
           month: number
-          status?: Database["public"]["Enums"]["period_status"]
+          status?: Database["public"]["Enums"]["pos_period_status"]
           year: number
         }
         Update: {
@@ -260,20 +261,20 @@ export type Database = {
           created_at?: string
           id?: string
           month?: number
-          status?: Database["public"]["Enums"]["period_status"]
+          status?: Database["public"]["Enums"]["pos_period_status"]
           year?: number
         }
         Relationships: [
           {
-            foreignKeyName: "fiscal_periods_company_id_fkey"
+            foreignKeyName: "pos_fiscal_periods_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
-            referencedRelation: "companies"
+            referencedRelation: "pos_companies"
             referencedColumns: ["id"]
           },
         ]
       }
-      journal_entries: {
+      pos_journal_entries: {
         Row: {
           company_id: string
           created_at: string
@@ -289,7 +290,7 @@ export type Database = {
           reversed_by: string | null
           source_doc_id: string | null
           source_doc_type: string
-          status: Database["public"]["Enums"]["journal_status"]
+          status: Database["public"]["Enums"]["pos_journal_status"]
         }
         Insert: {
           company_id: string
@@ -306,7 +307,7 @@ export type Database = {
           reversed_by?: string | null
           source_doc_id?: string | null
           source_doc_type?: string
-          status?: Database["public"]["Enums"]["journal_status"]
+          status?: Database["public"]["Enums"]["pos_journal_status"]
         }
         Update: {
           company_id?: string
@@ -323,40 +324,40 @@ export type Database = {
           reversed_by?: string | null
           source_doc_id?: string | null
           source_doc_type?: string
-          status?: Database["public"]["Enums"]["journal_status"]
+          status?: Database["public"]["Enums"]["pos_journal_status"]
         }
         Relationships: [
           {
-            foreignKeyName: "journal_entries_company_id_fkey"
+            foreignKeyName: "pos_journal_entries_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
-            referencedRelation: "companies"
+            referencedRelation: "pos_companies"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "journal_entries_period_id_fkey"
+            foreignKeyName: "pos_journal_entries_period_id_fkey"
             columns: ["period_id"]
             isOneToOne: false
-            referencedRelation: "fiscal_periods"
+            referencedRelation: "pos_fiscal_periods"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "journal_entries_reversal_of_fkey"
+            foreignKeyName: "pos_journal_entries_reversal_of_fkey"
             columns: ["reversal_of"]
             isOneToOne: false
-            referencedRelation: "journal_entries"
+            referencedRelation: "pos_journal_entries"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "journal_entries_reversed_by_fkey"
+            foreignKeyName: "pos_journal_entries_reversed_by_fkey"
             columns: ["reversed_by"]
             isOneToOne: false
-            referencedRelation: "journal_entries"
+            referencedRelation: "pos_journal_entries"
             referencedColumns: ["id"]
           },
         ]
       }
-      journal_lines: {
+      pos_journal_lines: {
         Row: {
           account_id: string
           branch_id: string | null
@@ -395,36 +396,36 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "journal_lines_account_id_fkey"
+            foreignKeyName: "pos_journal_lines_account_id_fkey"
             columns: ["account_id"]
             isOneToOne: false
-            referencedRelation: "accounts"
+            referencedRelation: "pos_accounts"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "journal_lines_branch_id_fkey"
+            foreignKeyName: "pos_journal_lines_branch_id_fkey"
             columns: ["branch_id"]
             isOneToOne: false
-            referencedRelation: "branches"
+            referencedRelation: "pos_branches"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "journal_lines_company_id_fkey"
+            foreignKeyName: "pos_journal_lines_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
-            referencedRelation: "companies"
+            referencedRelation: "pos_companies"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "journal_lines_entry_id_fkey"
+            foreignKeyName: "pos_journal_lines_entry_id_fkey"
             columns: ["entry_id"]
             isOneToOne: false
-            referencedRelation: "journal_entries"
+            referencedRelation: "pos_journal_entries"
             referencedColumns: ["id"]
           },
         ]
       }
-      tax_codes: {
+      pos_tax_codes: {
         Row: {
           code: string
           company_id: string
@@ -434,7 +435,7 @@ export type Database = {
           is_active: boolean
           name: string
           rate: number
-          type: Database["public"]["Enums"]["tax_type"]
+          type: Database["public"]["Enums"]["pos_tax_type"]
         }
         Insert: {
           code: string
@@ -445,7 +446,7 @@ export type Database = {
           is_active?: boolean
           name: string
           rate?: number
-          type: Database["public"]["Enums"]["tax_type"]
+          type: Database["public"]["Enums"]["pos_tax_type"]
         }
         Update: {
           code?: string
@@ -456,26 +457,26 @@ export type Database = {
           is_active?: boolean
           name?: string
           rate?: number
-          type?: Database["public"]["Enums"]["tax_type"]
+          type?: Database["public"]["Enums"]["pos_tax_type"]
         }
         Relationships: [
           {
-            foreignKeyName: "tax_codes_company_id_fkey"
+            foreignKeyName: "pos_tax_codes_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
-            referencedRelation: "companies"
+            referencedRelation: "pos_companies"
             referencedColumns: ["id"]
           },
         ]
       }
-      user_roles: {
+      pos_user_roles: {
         Row: {
           branch_ids: string[]
           company_id: string
           created_at: string
           created_by: string | null
           id: string
-          role: Database["public"]["Enums"]["app_role"]
+          role: Database["public"]["Enums"]["pos_app_role"]
           user_id: string
         }
         Insert: {
@@ -484,7 +485,7 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           id?: string
-          role: Database["public"]["Enums"]["app_role"]
+          role: Database["public"]["Enums"]["pos_app_role"]
           user_id: string
         }
         Update: {
@@ -493,15 +494,15 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           id?: string
-          role?: Database["public"]["Enums"]["app_role"]
+          role?: Database["public"]["Enums"]["pos_app_role"]
           user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "user_roles_company_id_fkey"
+            foreignKeyName: "pos_user_roles_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
-            referencedRelation: "companies"
+            referencedRelation: "pos_companies"
             referencedColumns: ["id"]
           },
         ]
@@ -511,7 +512,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      bootstrap_company: {
+      pos_bootstrap_company: {
         Args: {
           p_branch_code?: string
           p_branch_name?: string
@@ -521,11 +522,10 @@ export type Database = {
         }
         Returns: string
       }
-      custom_access_token_hook: { Args: { event: Json }; Returns: Json }
     }
     Enums: {
-      account_type: "asset" | "liability" | "equity" | "revenue" | "expense"
-      app_role:
+      pos_account_type: "asset" | "liability" | "equity" | "revenue" | "expense"
+      pos_app_role:
         | "owner"
         | "admin"
         | "accountant"
@@ -533,11 +533,11 @@ export type Database = {
         | "cashier"
         | "warehouse"
         | "customer"
-      balance_side: "debit" | "credit"
-      branch_type: "store" | "warehouse" | "online_hub"
-      journal_status: "draft" | "posted" | "reversed"
-      period_status: "open" | "closed"
-      tax_type: "vatable" | "exempt" | "zero_rated"
+      pos_balance_side: "debit" | "credit"
+      pos_branch_type: "store" | "warehouse" | "online_hub"
+      pos_journal_status: "draft" | "posted" | "reversed"
+      pos_period_status: "open" | "closed"
+      pos_tax_type: "vatable" | "exempt" | "zero_rated"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -665,8 +665,8 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      account_type: ["asset", "liability", "equity", "revenue", "expense"],
-      app_role: [
+      pos_account_type: ["asset", "liability", "equity", "revenue", "expense"],
+      pos_app_role: [
         "owner",
         "admin",
         "accountant",
@@ -675,11 +675,11 @@ export const Constants = {
         "warehouse",
         "customer",
       ],
-      balance_side: ["debit", "credit"],
-      branch_type: ["store", "warehouse", "online_hub"],
-      journal_status: ["draft", "posted", "reversed"],
-      period_status: ["open", "closed"],
-      tax_type: ["vatable", "exempt", "zero_rated"],
+      pos_balance_side: ["debit", "credit"],
+      pos_branch_type: ["store", "warehouse", "online_hub"],
+      pos_journal_status: ["draft", "posted", "reversed"],
+      pos_period_status: ["open", "closed"],
+      pos_tax_type: ["vatable", "exempt", "zero_rated"],
     },
   },
 } as const
