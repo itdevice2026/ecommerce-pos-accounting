@@ -15,7 +15,14 @@ One web app that sells online and in-store from a single stock pool, with every 
 ## Docs
 
 - [System design and spec](docs/system-design.md) — architecture, schema, workflows, accounting rules, reports, CI/CD, roadmap
+- [Supabase setup](docs/supabase-setup.md) — project details, what the migrations create, one-time steps
 
 ## Status
 
-Phase 0 (foundation) has not started yet. See the roadmap in the spec.
+Phase 0 (foundation) in progress:
+
+- [x] Supabase project `ecommerce-pos-accounting` (Singapore)
+- [x] Database foundation: companies, branches, roles, RLS, chart of accounts, tax codes, fiscal periods, journals with balance and period-lock rules, audit log
+- [ ] Enable the access-token hook and bootstrap the company (see Supabase setup)
+- [ ] Next.js app skeleton with Supabase Auth
+- [ ] GitHub Actions CI/CD
