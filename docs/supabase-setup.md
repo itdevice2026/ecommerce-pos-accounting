@@ -35,6 +35,8 @@ Applied to bom-system:
 | `20261011161149_pos_rls_policies` | RLS policies per role; anon has no access to POS tables |
 | `20261011161250_pos_bootstrap_and_defaults` | Setup allow-list; `pos_bootstrap_company()`; default tax codes, chart of accounts, fiscal periods |
 | `20261011164158_pos_catalog` | `pos_categories`, `pos_products`, `pos_product_variants` (barcode / scale PLU), `pos_prices` (POS and online, dated); `pos_save_product()`; `pos_current_prices` view |
+| `20261012001050_pos_inventory` | `pos_stock_locations` (Main stock per branch, In transit per company), `pos_lots`, `pos_stock_moves` (immutable ledger), `pos_stock_balances` (kept by trigger, never negative), `pos_product_costs` (moving average), `pos_stock_docs` / `pos_stock_doc_lines`, RLS |
+| `20261012001232`–`20261012001343` `pos_inventory_*` | `pos_save_stock_doc()`, `pos_post_stock_doc()` (ledger + average cost + journal), `pos_receive_transfer()` (shortages written off), `pos_cancel_stock_doc()`, `pos_stock_summary` view |
 
 ### Rules enforced by the database
 
@@ -62,6 +64,9 @@ select public.pos_bootstrap_company('Company name', 'TIN', true, 'MAIN', 'Main B
 It creates the company and first branch, makes the caller the owner, and seeds tax codes, the chart of accounts and this year's fiscal periods. It refuses to run once a company exists.
 
 ## Changing the schema
+
+Note: the Supabase approval step cancels any migration that contains a `delete` statement, so POS functions avoid deletes (edited drafts mark old lines `superseded` instead).
+
 
 bom-system's migration history includes 300+ migrations from your other apps that are not in this repo, so **do not run `supabase db push` from this repo**; it would try to reconcile the whole history. Instead:
 

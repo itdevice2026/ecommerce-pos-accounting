@@ -1,6 +1,7 @@
-// Types for the POS tables (pos_*) in the shared bom-system Supabase project (emkcwukiqxnvcbhkjiqz).
-// That project also holds other apps' tables, so this file keeps only the pos_ objects.
-// After a POS migration, regenerate with `npm run gen:types` and keep only the pos_ entries.
+// Types for the POS objects (pos_*) in the shared bom-system Supabase project (emkcwukiqxnvcbhkjiqz).
+// That project also holds other apps' tables, so only the pos_ entries are kept.
+// Regenerate after a POS migration (Supabase MCP generate_typescript_types or
+// `supabase gen types typescript --project-id emkcwukiqxnvcbhkjiqz`) and filter to pos_ entries.
 
 export type Json =
   | string
@@ -14,7 +15,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.18"
+    PostgrestVersion: "14.5"
   }
   public: {
     Tables: {
@@ -151,6 +152,54 @@ export type Database = {
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "pos_companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pos_categories: {
+        Row: {
+          company_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          is_active: boolean
+          name: string
+          parent_id: string | null
+          sort_order: number
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          parent_id?: string | null
+          sort_order?: number
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          parent_id?: string | null
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pos_categories_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "pos_companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_categories_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "pos_categories"
             referencedColumns: ["id"]
           },
         ]
@@ -425,133 +474,226 @@ export type Database = {
           },
         ]
       }
-      pos_tax_codes: {
+      pos_lots: {
         Row: {
-          code: string
           company_id: string
           created_at: string
           created_by: string | null
+          expiry_date: string | null
           id: string
-          is_active: boolean
-          name: string
-          rate: number
-          type: Database["public"]["Enums"]["pos_tax_type"]
+          lot_no: string
+          product_id: string
         }
         Insert: {
-          code: string
           company_id: string
           created_at?: string
           created_by?: string | null
+          expiry_date?: string | null
           id?: string
-          is_active?: boolean
-          name: string
-          rate?: number
-          type: Database["public"]["Enums"]["pos_tax_type"]
+          lot_no: string
+          product_id: string
         }
         Update: {
-          code?: string
           company_id?: string
           created_at?: string
           created_by?: string | null
+          expiry_date?: string | null
           id?: string
-          is_active?: boolean
-          name?: string
-          rate?: number
-          type?: Database["public"]["Enums"]["pos_tax_type"]
+          lot_no?: string
+          product_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "pos_tax_codes_company_id_fkey"
+            foreignKeyName: "pos_lots_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "pos_companies"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "pos_lots_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "pos_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_lots_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "pos_stock_summary"
+            referencedColumns: ["product_id"]
+          },
         ]
       }
-      pos_user_roles: {
+      pos_prices: {
         Row: {
-          branch_ids: string[]
+          branch_id: string | null
+          channel: Database["public"]["Enums"]["pos_channel"]
           company_id: string
           created_at: string
           created_by: string | null
           id: string
-          role: Database["public"]["Enums"]["pos_app_role"]
-          user_id: string
+          price: number
+          valid_from: string
+          variant_id: string
         }
         Insert: {
-          branch_ids?: string[]
+          branch_id?: string | null
+          channel: Database["public"]["Enums"]["pos_channel"]
           company_id: string
           created_at?: string
           created_by?: string | null
           id?: string
-          role: Database["public"]["Enums"]["pos_app_role"]
-          user_id: string
+          price: number
+          valid_from?: string
+          variant_id: string
         }
         Update: {
-          branch_ids?: string[]
+          branch_id?: string | null
+          channel?: Database["public"]["Enums"]["pos_channel"]
           company_id?: string
           created_at?: string
           created_by?: string | null
           id?: string
-          role?: Database["public"]["Enums"]["pos_app_role"]
-          user_id?: string
+          price?: number
+          valid_from?: string
+          variant_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "pos_user_roles_company_id_fkey"
+            foreignKeyName: "pos_prices_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "pos_branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_prices_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "pos_companies"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "pos_prices_variant_id_fkey"
+            columns: ["variant_id"]
+            isOneToOne: false
+            referencedRelation: "pos_product_variants"
+            referencedColumns: ["id"]
+          },
         ]
       }
-      pos_categories: {
+      pos_product_costs: {
         Row: {
+          avg_cost: number
           company_id: string
+          product_id: string
+          updated_at: string
+        }
+        Insert: {
+          avg_cost?: number
+          company_id: string
+          product_id: string
+          updated_at?: string
+        }
+        Update: {
+          avg_cost?: number
+          company_id?: string
+          product_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pos_product_costs_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "pos_companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_product_costs_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: true
+            referencedRelation: "pos_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_product_costs_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: true
+            referencedRelation: "pos_stock_summary"
+            referencedColumns: ["product_id"]
+          },
+        ]
+      }
+      pos_product_variants: {
+        Row: {
+          barcode: string | null
+          company_id: string
+          conversion_to_base: number
           created_at: string
-          created_by: string | null
           id: string
           is_active: boolean
+          is_default: boolean
           name: string
-          parent_id: string | null
+          plu: string | null
+          product_id: string
           sort_order: number
+          uom: string
+          updated_at: string
         }
         Insert: {
+          barcode?: string | null
           company_id: string
+          conversion_to_base?: number
           created_at?: string
-          created_by?: string | null
           id?: string
           is_active?: boolean
+          is_default?: boolean
           name: string
-          parent_id?: string | null
+          plu?: string | null
+          product_id: string
           sort_order?: number
+          uom?: string
+          updated_at?: string
         }
         Update: {
+          barcode?: string | null
           company_id?: string
+          conversion_to_base?: number
           created_at?: string
-          created_by?: string | null
           id?: string
           is_active?: boolean
+          is_default?: boolean
           name?: string
-          parent_id?: string | null
+          plu?: string | null
+          product_id?: string
           sort_order?: number
+          uom?: string
+          updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "pos_categories_company_id_fkey"
+            foreignKeyName: "pos_product_variants_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "pos_companies"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "pos_categories_parent_id_fkey"
-            columns: ["parent_id"]
+            foreignKeyName: "pos_product_variants_product_id_fkey"
+            columns: ["product_id"]
             isOneToOne: false
-            referencedRelation: "pos_categories"
+            referencedRelation: "pos_products"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_product_variants_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "pos_stock_summary"
+            referencedColumns: ["product_id"]
           },
         ]
       }
@@ -637,123 +779,493 @@ export type Database = {
           },
         ]
       }
-      pos_product_variants: {
+      pos_stock_balances: {
         Row: {
-          barcode: string | null
           company_id: string
-          conversion_to_base: number
-          created_at: string
           id: string
-          is_active: boolean
-          is_default: boolean
-          name: string
-          plu: string | null
+          location_id: string
+          lot_id: string | null
           product_id: string
-          sort_order: number
-          uom: string
+          qty: number
           updated_at: string
         }
         Insert: {
-          barcode?: string | null
           company_id: string
-          conversion_to_base?: number
-          created_at?: string
           id?: string
-          is_active?: boolean
-          is_default?: boolean
-          name: string
-          plu?: string | null
+          location_id: string
+          lot_id?: string | null
           product_id: string
-          sort_order?: number
-          uom?: string
+          qty?: number
           updated_at?: string
         }
         Update: {
-          barcode?: string | null
           company_id?: string
-          conversion_to_base?: number
-          created_at?: string
           id?: string
-          is_active?: boolean
-          is_default?: boolean
-          name?: string
-          plu?: string | null
+          location_id?: string
+          lot_id?: string | null
           product_id?: string
-          sort_order?: number
-          uom?: string
+          qty?: number
           updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "pos_product_variants_company_id_fkey"
+            foreignKeyName: "pos_stock_balances_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "pos_companies"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "pos_product_variants_product_id_fkey"
+            foreignKeyName: "pos_stock_balances_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "pos_stock_locations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_stock_balances_lot_id_fkey"
+            columns: ["lot_id"]
+            isOneToOne: false
+            referencedRelation: "pos_lots"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_stock_balances_product_id_fkey"
             columns: ["product_id"]
             isOneToOne: false
             referencedRelation: "pos_products"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "pos_stock_balances_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "pos_stock_summary"
+            referencedColumns: ["product_id"]
+          },
         ]
       }
-      pos_prices: {
+      pos_stock_doc_lines: {
         Row: {
-          branch_id: string | null
-          channel: Database["public"]["Enums"]["pos_channel"]
           company_id: string
-          created_at: string
-          created_by: string | null
+          doc_id: string
+          expiry_date: string | null
           id: string
-          price: number
-          valid_from: string
-          variant_id: string
+          line_no: number
+          lot_id: string | null
+          lot_no: string | null
+          note: string | null
+          product_id: string
+          qty: number
+          reason: Database["public"]["Enums"]["pos_adjust_reason"] | null
+          received_qty: number | null
+          superseded: boolean
+          unit_cost: number | null
         }
         Insert: {
-          branch_id?: string | null
-          channel: Database["public"]["Enums"]["pos_channel"]
           company_id: string
-          created_at?: string
-          created_by?: string | null
+          doc_id: string
+          expiry_date?: string | null
           id?: string
-          price: number
-          valid_from?: string
-          variant_id: string
+          line_no?: number
+          lot_id?: string | null
+          lot_no?: string | null
+          note?: string | null
+          product_id: string
+          qty: number
+          reason?: Database["public"]["Enums"]["pos_adjust_reason"] | null
+          received_qty?: number | null
+          superseded?: boolean
+          unit_cost?: number | null
         }
         Update: {
-          branch_id?: string | null
-          channel?: Database["public"]["Enums"]["pos_channel"]
           company_id?: string
-          created_at?: string
-          created_by?: string | null
+          doc_id?: string
+          expiry_date?: string | null
           id?: string
-          price?: number
-          valid_from?: string
-          variant_id?: string
+          line_no?: number
+          lot_id?: string | null
+          lot_no?: string | null
+          note?: string | null
+          product_id?: string
+          qty?: number
+          reason?: Database["public"]["Enums"]["pos_adjust_reason"] | null
+          received_qty?: number | null
+          superseded?: boolean
+          unit_cost?: number | null
         }
         Relationships: [
           {
-            foreignKeyName: "pos_prices_branch_id_fkey"
+            foreignKeyName: "pos_stock_doc_lines_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "pos_companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_stock_doc_lines_doc_id_fkey"
+            columns: ["doc_id"]
+            isOneToOne: false
+            referencedRelation: "pos_stock_docs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_stock_doc_lines_lot_id_fkey"
+            columns: ["lot_id"]
+            isOneToOne: false
+            referencedRelation: "pos_lots"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_stock_doc_lines_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "pos_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_stock_doc_lines_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "pos_stock_summary"
+            referencedColumns: ["product_id"]
+          },
+        ]
+      }
+      pos_stock_docs: {
+        Row: {
+          branch_id: string
+          cancelled_at: string | null
+          cancelled_by: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          doc_date: string
+          doc_no: string | null
+          doc_type: Database["public"]["Enums"]["pos_stock_doc_type"]
+          id: string
+          journal_entry_id: string | null
+          location_id: string
+          note: string | null
+          posted_at: string | null
+          posted_by: string | null
+          received_at: string | null
+          received_by: string | null
+          reference: string | null
+          status: Database["public"]["Enums"]["pos_stock_doc_status"]
+          supplier_name: string | null
+          to_branch_id: string | null
+          to_location_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          branch_id: string
+          cancelled_at?: string | null
+          cancelled_by?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          doc_date?: string
+          doc_no?: string | null
+          doc_type: Database["public"]["Enums"]["pos_stock_doc_type"]
+          id?: string
+          journal_entry_id?: string | null
+          location_id: string
+          note?: string | null
+          posted_at?: string | null
+          posted_by?: string | null
+          received_at?: string | null
+          received_by?: string | null
+          reference?: string | null
+          status?: Database["public"]["Enums"]["pos_stock_doc_status"]
+          supplier_name?: string | null
+          to_branch_id?: string | null
+          to_location_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          branch_id?: string
+          cancelled_at?: string | null
+          cancelled_by?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          doc_date?: string
+          doc_no?: string | null
+          doc_type?: Database["public"]["Enums"]["pos_stock_doc_type"]
+          id?: string
+          journal_entry_id?: string | null
+          location_id?: string
+          note?: string | null
+          posted_at?: string | null
+          posted_by?: string | null
+          received_at?: string | null
+          received_by?: string | null
+          reference?: string | null
+          status?: Database["public"]["Enums"]["pos_stock_doc_status"]
+          supplier_name?: string | null
+          to_branch_id?: string | null
+          to_location_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pos_stock_docs_branch_id_fkey"
             columns: ["branch_id"]
             isOneToOne: false
             referencedRelation: "pos_branches"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "pos_prices_company_id_fkey"
+            foreignKeyName: "pos_stock_docs_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "pos_companies"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "pos_prices_variant_id_fkey"
-            columns: ["variant_id"]
+            foreignKeyName: "pos_stock_docs_journal_entry_id_fkey"
+            columns: ["journal_entry_id"]
             isOneToOne: false
-            referencedRelation: "pos_product_variants"
+            referencedRelation: "pos_journal_entries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_stock_docs_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "pos_stock_locations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_stock_docs_to_branch_id_fkey"
+            columns: ["to_branch_id"]
+            isOneToOne: false
+            referencedRelation: "pos_branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_stock_docs_to_location_id_fkey"
+            columns: ["to_location_id"]
+            isOneToOne: false
+            referencedRelation: "pos_stock_locations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pos_stock_locations: {
+        Row: {
+          branch_id: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          is_active: boolean
+          is_default: boolean
+          name: string
+          type: Database["public"]["Enums"]["pos_location_type"]
+        }
+        Insert: {
+          branch_id?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          is_default?: boolean
+          name: string
+          type?: Database["public"]["Enums"]["pos_location_type"]
+        }
+        Update: {
+          branch_id?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          is_default?: boolean
+          name?: string
+          type?: Database["public"]["Enums"]["pos_location_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pos_stock_locations_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "pos_branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_stock_locations_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "pos_companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pos_stock_moves: {
+        Row: {
+          company_id: string
+          created_at: string
+          created_by: string | null
+          doc_id: string | null
+          doc_line_id: string | null
+          doc_type: string
+          id: string
+          location_id: string
+          lot_id: string | null
+          move_type: Database["public"]["Enums"]["pos_move_type"]
+          product_id: string
+          qty: number
+          unit_cost: number
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          doc_id?: string | null
+          doc_line_id?: string | null
+          doc_type: string
+          id?: string
+          location_id: string
+          lot_id?: string | null
+          move_type: Database["public"]["Enums"]["pos_move_type"]
+          product_id: string
+          qty: number
+          unit_cost?: number
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          doc_id?: string | null
+          doc_line_id?: string | null
+          doc_type?: string
+          id?: string
+          location_id?: string
+          lot_id?: string | null
+          move_type?: Database["public"]["Enums"]["pos_move_type"]
+          product_id?: string
+          qty?: number
+          unit_cost?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pos_stock_moves_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "pos_companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_stock_moves_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "pos_stock_locations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_stock_moves_lot_id_fkey"
+            columns: ["lot_id"]
+            isOneToOne: false
+            referencedRelation: "pos_lots"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_stock_moves_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "pos_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_stock_moves_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "pos_stock_summary"
+            referencedColumns: ["product_id"]
+          },
+        ]
+      }
+      pos_tax_codes: {
+        Row: {
+          code: string
+          company_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          is_active: boolean
+          name: string
+          rate: number
+          type: Database["public"]["Enums"]["pos_tax_type"]
+        }
+        Insert: {
+          code: string
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          rate?: number
+          type: Database["public"]["Enums"]["pos_tax_type"]
+        }
+        Update: {
+          code?: string
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          rate?: number
+          type?: Database["public"]["Enums"]["pos_tax_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pos_tax_codes_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "pos_companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pos_user_roles: {
+        Row: {
+          branch_ids: string[]
+          company_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          role: Database["public"]["Enums"]["pos_app_role"]
+          user_id: string
+        }
+        Insert: {
+          branch_ids?: string[]
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          role: Database["public"]["Enums"]["pos_app_role"]
+          user_id: string
+        }
+        Update: {
+          branch_ids?: string[]
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["pos_app_role"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pos_user_roles_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "pos_companies"
             referencedColumns: ["id"]
           },
         ]
@@ -777,6 +1289,38 @@ export type Database = {
           },
         ]
       }
+      pos_stock_summary: {
+        Row: {
+          avg_cost: number | null
+          base_uom: string | null
+          category_id: string | null
+          company_id: string | null
+          is_active: boolean | null
+          name: string | null
+          product_id: string | null
+          qty_in_transit: number | null
+          qty_on_hand: number | null
+          reorder_point: number | null
+          sku: string | null
+          track_lots: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pos_products_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "pos_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_products_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "pos_companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       pos_bootstrap_company: {
@@ -789,10 +1333,25 @@ export type Database = {
         }
         Returns: string
       }
+      pos_cancel_stock_doc: { Args: { p_doc: string }; Returns: undefined }
+      pos_post_stock_doc: { Args: { p_doc: string }; Returns: string }
+      pos_receive_transfer: {
+        Args: { p_doc: string; p_received?: Json }
+        Returns: undefined
+      }
       pos_save_product: { Args: { p: Json }; Returns: string }
+      pos_save_stock_doc: { Args: { p: Json }; Returns: string }
     }
     Enums: {
       pos_account_type: "asset" | "liability" | "equity" | "revenue" | "expense"
+      pos_adjust_reason:
+        | "spoilage"
+        | "damage"
+        | "expired"
+        | "shrinkage"
+        | "count_variance"
+        | "found"
+        | "other"
       pos_app_role:
         | "owner"
         | "admin"
@@ -802,11 +1361,27 @@ export type Database = {
         | "warehouse"
         | "customer"
       pos_balance_side: "debit" | "credit"
-      pos_channel: "pos" | "online"
       pos_branch_type: "store" | "warehouse" | "online_hub"
+      pos_channel: "pos" | "online"
       pos_journal_status: "draft" | "posted" | "reversed"
+      pos_location_type: "storage" | "transit"
+      pos_move_type:
+        | "opening"
+        | "receipt"
+        | "adjustment"
+        | "transfer_out"
+        | "transfer_in"
+        | "sale"
+        | "sale_return"
       pos_period_status: "open" | "closed"
       pos_sold_by: "piece" | "weight"
+      pos_stock_doc_status:
+        | "draft"
+        | "posted"
+        | "in_transit"
+        | "received"
+        | "cancelled"
+      pos_stock_doc_type: "opening" | "receipt" | "adjustment" | "transfer"
       pos_tax_type: "vatable" | "exempt" | "zero_rated"
     }
     CompositeTypes: {
@@ -936,6 +1511,15 @@ export const Constants = {
   public: {
     Enums: {
       pos_account_type: ["asset", "liability", "equity", "revenue", "expense"],
+      pos_adjust_reason: [
+        "spoilage",
+        "damage",
+        "expired",
+        "shrinkage",
+        "count_variance",
+        "found",
+        "other",
+      ],
       pos_app_role: [
         "owner",
         "admin",
@@ -946,11 +1530,29 @@ export const Constants = {
         "customer",
       ],
       pos_balance_side: ["debit", "credit"],
-      pos_channel: ["pos", "online"],
       pos_branch_type: ["store", "warehouse", "online_hub"],
+      pos_channel: ["pos", "online"],
       pos_journal_status: ["draft", "posted", "reversed"],
+      pos_location_type: ["storage", "transit"],
+      pos_move_type: [
+        "opening",
+        "receipt",
+        "adjustment",
+        "transfer_out",
+        "transfer_in",
+        "sale",
+        "sale_return",
+      ],
       pos_period_status: ["open", "closed"],
       pos_sold_by: ["piece", "weight"],
+      pos_stock_doc_status: [
+        "draft",
+        "posted",
+        "in_transit",
+        "received",
+        "cancelled",
+      ],
+      pos_stock_doc_type: ["opening", "receipt", "adjustment", "transfer"],
       pos_tax_type: ["vatable", "exempt", "zero_rated"],
     },
   },

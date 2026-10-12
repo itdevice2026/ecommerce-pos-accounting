@@ -44,7 +44,7 @@ Phase 0 (foundation):
 Phase 1 (catalog and inventory):
 
 - [x] Products: categories, products, variants (barcode / scale PLU), POS and online prices
-- [ ] Inventory: locations, receiving, transfers, adjustments, stock ledger
+- [x] Inventory: locations, opening stock, stock in, adjustments, transfers, lots and expiry, stock ledger, moving-average cost, journals
 - [ ] Purchasing: suppliers, purchase orders
 
 Next up:

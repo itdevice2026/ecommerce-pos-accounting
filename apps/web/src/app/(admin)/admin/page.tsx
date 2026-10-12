@@ -112,7 +112,8 @@ export default function AdminDashboardPage() {
                 <Progress done label="Sign-in and company setup" />
                 <Progress label="Users & roles screen" />
                 <Progress done label="Products, variants and prices" />
-                <Progress label="Inventory and purchasing (Phase 1)" />
+                <Progress done label="Inventory: stock, lots, transfers, adjustments" />
+                <Progress label="Purchasing (Phase 1)" />
                 <Progress label="Accounting screens (Phase 2)" />
                 <Progress label="POS (Phase 3)" />
                 <Progress label="Online store (Phase 4)" />

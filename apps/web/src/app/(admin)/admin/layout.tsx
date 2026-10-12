@@ -9,7 +9,7 @@ import { BACK_OFFICE_ROLES, ROLE_LABELS, RequireRole, useAuth } from "@/lib/auth
 const nav = [
   { href: "/admin/", label: "Dashboard", ready: true },
   { href: "/admin/products/", label: "Products", ready: true },
-  { href: "#", label: "Inventory", ready: false, phase: "Phase 1" },
+  { href: "/admin/inventory/", label: "Inventory", ready: true },
   { href: "#", label: "Purchasing", ready: false, phase: "Phase 1" },
   { href: "#", label: "Accounting", ready: false, phase: "Phase 2" },
   { href: "#", label: "Reports", ready: false, phase: "Phase 5" },
